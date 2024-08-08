@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { getAllCabins } from "../../services/cabinsAPI";
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
+import { useState } from "react";
+import Button from "../../ui/Button";
+import CreateCabinForm from '../../features/cabins/CreateCabinForm'
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -12,6 +15,10 @@ const Table = styled.div`
   background-color: var(--color-grey-0);
   border-radius: 7px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
 `;
 
 const TableHeader = styled.header`
@@ -30,6 +37,8 @@ const TableHeader = styled.header`
 `;
 
 function CabinTable() {
+  const [showForm, setShowForm] = useState(false);
+
   const {
     data: cabins,
     error,
@@ -55,6 +64,10 @@ function CabinTable() {
       {cabins?.map((cabin) => (
         <CabinRow key={cabin.id} cabin={cabin} />
       ))}
+
+      <Button onClick={() => setShowForm(!showForm)}>Add new Cabin</Button>
+      {showForm && <CreateCabinForm />}
+
     </Table>
   );
 }

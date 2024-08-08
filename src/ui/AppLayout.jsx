@@ -15,13 +15,21 @@ grid-template-columns: 26rem 1fr;
 grid-template-rows: auto 1fr;
 `
 
+const Container = styled.div`
+display: flex;
+flex-direction: column;
+gap: 2rem;
+`
+
 function AppLayout() {
     return (
         <StyledDiv>
             <Header />
             <Sidebar />
             <StyleMain>
+                <Container>
                 <Outlet />
+                </Container>
             </StyleMain>
         </StyledDiv>
     )

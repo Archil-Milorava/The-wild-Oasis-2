@@ -47,7 +47,7 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
-  const { register, handleSubmit, reset, getValues, formState } = useForm();
+  const { register, handleSubmit, reset, formState, getValues } = useForm();
   const { errors } = formState;
   const queryClient = useQueryClient();
 
@@ -62,12 +62,9 @@ function CreateCabinForm() {
 
   function onSubmit(data) {
     mutate({...data, image: data.image[0]});
+    
     reset();
   }
-
-  // function onError(errors) {
-  //   console.log(errors);
-  // }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -120,7 +117,7 @@ function CreateCabinForm() {
           defaultValue={0}
           {...register("discount", {
             required: "This field is required",
-            validate: (value) => value <= getValues().regularPrice || "Discount needs to be lower than regular price",
+            validate: (value) => value <= getValues("regularPrice") || "Discount needs to be lower than regular price",
           })}
         />
         {errors?.discount?.message && (
@@ -132,7 +129,6 @@ function CreateCabinForm() {
         <Label htmlFor="description">Description for website</Label>
         <Textarea
           disabled={isLoading}
-          type="number"
           id="description"
           defaultValue=""
           {...register("description", { required: "This field is required" })}

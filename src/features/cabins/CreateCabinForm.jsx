@@ -1,14 +1,15 @@
 import styled from "styled-components";
+import toast from "react-hot-toast";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
+import { createCabin } from "../../services/cabinsAPI";
+
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addCabin } from "../../services/cabinsAPI";
-import toast from "react-hot-toast";
 
 const FormRow = styled.div`
   display: grid;
@@ -47,12 +48,14 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
+
   const { register, handleSubmit, reset, formState, getValues } = useForm();
+
   const { errors } = formState;
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: addCabin,
+    mutationFn: createCabin,
     onSuccess: () => {
       toast.success("Cabin created successfully"),
         queryClient.invalidateQueries({ queryKey: ["cabins"] });
@@ -64,6 +67,7 @@ function CreateCabinForm() {
     mutate({...data, image: data.image[0]});
     
     reset();
+    
   }
 
   return (
@@ -117,7 +121,7 @@ function CreateCabinForm() {
           defaultValue={0}
           {...register("discount", {
             required: "This field is required",
-            validate: (value) => value <= getValues("regularPrice") || "Discount needs to be lower than regular price",
+            validate: (value) => Number(value) <= Number(getValues("regularPrice")) || "Discount needs to be lower than regular price",
           })}
         />
         {errors?.discount?.message && (
@@ -154,7 +158,7 @@ function CreateCabinForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
+        <Button>{'Create Cabin'}</Button>
       </FormRow>
     </Form>
   );

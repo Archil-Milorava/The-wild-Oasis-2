@@ -4,6 +4,8 @@ import { deleteCabin } from "../../services/cabinsAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Spinner from "../../ui/Spinner";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import CreateCabinForm from "./CreateCabinForm";
 
 const TableRow = styled.div`
   display: grid;
@@ -51,7 +53,7 @@ function CabinRow({ cabin }) {
 
   const { isLoading, mutate } = useMutation({
     mutationFn: deleteCabin,
-    onSuccess: () =>{
+    onSuccess: () => {
       toast.success("Cabin deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
     },
@@ -59,16 +61,18 @@ function CabinRow({ cabin }) {
   });
 
   return (
-    <TableRow>
-      <Img src={image} />
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button disabled={isLoading} onClick={() => mutate(id)}>
-        {isLoading ? "Deleting..." : "Delete"}
-      </button>
-    </TableRow>
+    <>
+      <TableRow>
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        <Discount>{formatCurrency(discount)}</Discount>
+        <button disabled={isLoading} onClick={() => mutate(id)}>
+          {isLoading ? "Deleting..." : "Delete"}
+        </button>
+      </TableRow>
+    </>
   );
 }
 

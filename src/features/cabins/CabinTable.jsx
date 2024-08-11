@@ -2,10 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { getAllCabins } from "../../services/cabinsAPI";
 import Spinner from "../../ui/Spinner";
+import AddCabin from "./AddCabin";
 import CabinRow from "./CabinRow";
-import { useState } from "react";
-import Button from "../../ui/Button";
-import CreateCabinForm from '../../features/cabins/CreateCabinForm'
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -37,12 +35,7 @@ const TableHeader = styled.header`
 `;
 
 function CabinTable() {
-  const [showForm, setShowForm] = useState(false);
-
-  const {
-    data: cabins,
-    isLoading,
-  } = useQuery({
+  const { data: cabins, isLoading } = useQuery({
     queryKey: ["cabins"],
     queryFn: getAllCabins,
   });
@@ -64,8 +57,7 @@ function CabinTable() {
         <CabinRow key={cabin.id} cabin={cabin} />
       ))}
 
-      <Button onClick={() => setShowForm(!showForm)}>Add new Cabin</Button>
-      {showForm && <CreateCabinForm />}
+      <AddCabin />
 
     </Table>
   );

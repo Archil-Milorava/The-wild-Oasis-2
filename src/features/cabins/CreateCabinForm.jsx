@@ -47,7 +47,7 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm() {
+function CreateCabinForm({onCloseModal}) {
 
   const { register, handleSubmit, reset, formState, getValues } = useForm();
 
@@ -59,6 +59,7 @@ function CreateCabinForm() {
     onSuccess: () => {
       toast.success("Cabin created successfully"),
         queryClient.invalidateQueries({ queryKey: ["cabins"] });
+        onCloseModal?.()
     },
     onError: (err) => toast.error(err.message),
   });
@@ -155,7 +156,7 @@ function CreateCabinForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onCloseModal?.()}>
           Cancel
         </Button>
         <Button>{'Create Cabin'}</Button>

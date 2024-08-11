@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { IoCloseSharp } from "react-icons/io5";
+import { createPortal } from "react-dom";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +50,19 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+function Modal({ children, onClose }) {
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <Button onClick={onClose}>
+          <IoCloseSharp />
+        </Button>
+        {children}
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+export default Modal;

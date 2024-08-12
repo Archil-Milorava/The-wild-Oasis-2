@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import { formatCurrency } from "../../utils/helpers";
-import { deleteCabin } from "../../services/cabinsAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Spinner from "../../ui/Spinner";
-import toast from "react-hot-toast";
 import { useState } from "react";
-import CreateCabinForm from "./CreateCabinForm";
+import toast from "react-hot-toast";
+import styled from "styled-components";
+import { deleteCabin } from "../../services/cabinsAPI";
+import Button from "../../ui/Button";
+import Modal from "../../ui/Modal";
+import { formatCurrency } from "../../utils/helpers";
 
 const TableRow = styled.div`
   display: grid;
@@ -46,7 +46,29 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
+const DeleteContainer = styled.div`
+width: 25rem;
+height: 10rem;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3rem;
+`
+
+const DeleteCheck = styled.div`
+  font-size: large;
+`;
+const DeleteCheckButtons = styled.div`
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  justify-content: center;
+`;
+
 function CabinRow({ cabin }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const queryClient = useQueryClient();
 
   const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
@@ -68,9 +90,35 @@ function CabinRow({ cabin }) {
         <div>Fits up to {maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
         <Discount>{formatCurrency(discount)}</Discount>
-        <button disabled={isLoading} onClick={() => mutate(id)}>
+        <button
+          disabled={isLoading}
+          onClick={() => setIsModalOpen(!isModalOpen)}
+        >
           {isLoading ? "Deleting..." : "Delete"}
         </button>
+        {isModalOpen && (
+          <Modal onClose={() => setIsModalOpen(!isModalOpen)}>
+            {isLoading ? (
+              <div>Deleting...</div>
+            ) : (
+              <DeleteContainer>
+                <DeleteCheck>are you sure?</DeleteCheck>
+                <DeleteCheckButtons>
+                  <Button size="large" onClick={() => mutate(id)}>
+                    yes
+                  </Button>
+                  <Button
+                    variation="danger"
+                    size="large"
+                    onClick={() => setIsModalOpen(!isModalOpen)}
+                  >
+                    no
+                  </Button>
+                </DeleteCheckButtons>
+              </DeleteContainer>
+            )}
+          </Modal>
+        )}
       </TableRow>
     </>
   );

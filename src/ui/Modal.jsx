@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { IoCloseSharp } from "react-icons/io5";
 import { createPortal } from "react-dom";
+import { useEffect, useRef } from "react";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -52,9 +53,23 @@ const Button = styled.button`
 `;
 
 function Modal({ children, onClose }) {
+  const ref = useRef();
+
+  useEffect(() => {
+    function handleModalClose(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("click", handleModalClose, true);
+
+    return () => document.removeEventListener("click", handleModalClose, true);
+  }, [onClose]);
+
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={onClose}>
           <IoCloseSharp />
         </Button>

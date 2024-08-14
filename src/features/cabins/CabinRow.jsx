@@ -102,7 +102,7 @@ function CabinRow({ cabin }) {
               <div>Deleting...</div>
             ) : (
               <DeleteContainer>
-                <DeleteCheck>are you sure?</DeleteCheck>
+                <DeleteCheck>are you sure? This action cannot be undone</DeleteCheck>
                 <DeleteCheckButtons>
                   <Button size="large" onClick={() => mutate(id)}>
                     yes

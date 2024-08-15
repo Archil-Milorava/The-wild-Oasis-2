@@ -55,6 +55,12 @@ if(filteredValue === "all") filteredCabin = cabins;
 if(filteredValue === "with-discount") filteredCabin = cabins.filter((cabin) => cabin.discount > 0);
 if(filteredValue === "no-discount") filteredCabin = cabins.filter((cabin) => cabin.discount === 0);  
 
+//2 sort
+
+const sortBy = searchprams.get("sortBy") || "startDate-asc";
+const [field, direction] = sortBy.split("-");
+const modifier = direction === "asc" ? 1 : -1;
+const sortedCabin = filteredCabin.sort((a, b) => (a[field] - b[field]) * modifier);
 
 
   return (
@@ -68,7 +74,7 @@ if(filteredValue === "no-discount") filteredCabin = cabins.filter((cabin) => cab
         <div>Discount</div>
         <div>Quantity{}: {filteredCabin.length}</div>
       </TableHeader>
-      {filteredCabin.map((cabin) => (
+      {sortedCabin.map((cabin) => (
         <CabinRow key={cabin.id} cabin={cabin} />
       ))}
 

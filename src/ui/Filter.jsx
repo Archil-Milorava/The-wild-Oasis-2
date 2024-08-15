@@ -50,7 +50,7 @@ setSearchParams(searchParams)
   return (
     <StyledFilter>
       {options.map((option) => (
-        <FilterButton active={currentField === option.value} key={option.value} onClick={() => handleClick(option.value)}>{option.label} </FilterButton>
+        <FilterButton  key={option.value} onClick={() => handleClick(option.value)}>{option.label} </FilterButton>
       ))}
     </StyledFilter>
   )

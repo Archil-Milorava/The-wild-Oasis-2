@@ -11,6 +11,7 @@ import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import Tag from "../../ui/Tag";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -110,14 +111,22 @@ function BookingDataBox({ booking }) {
     numNights,
     numGuests,
     cabinPrice,
+    status,
     extrasPrice,
-    // totalPrice,
     hasBreakfast,
     observations,
     isPaid,
     Guests: { fullName: guestName, email, nationality, countryFlag, nationalId },
     Cabins: { name: cabinName },
   } = booking;
+
+const totalPrice = cabinPrice + extrasPrice;
+
+const statusToTagName = {
+  unconfirmed: "blue",
+  "checked-in": "green",
+  "checked-out": "silver",
+};
 
   return (
     <StyledBookingDataBox>
@@ -148,7 +157,9 @@ function BookingDataBox({ booking }) {
           <p>{email}</p>
           <span>&bull;</span>
           <p>National ID {nationalId}</p>
+        <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
         </Guest>
+
 
         {observations && (
           <DataItem
@@ -165,7 +176,7 @@ function BookingDataBox({ booking }) {
 
         <Price isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
-            {/* {formatCurrency(totalPrice)} */}
+            {formatCurrency(totalPrice)}
 
             {hasBreakfast &&
               ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(

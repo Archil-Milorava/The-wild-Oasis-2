@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
+import { FaEye } from "react-icons/fa";
+
 
 import Tag from "../../ui/Tag";
 import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
+import Button from "../../ui/Button";
+import { useNavigate } from "react-router-dom";
 
 const TableRow = styled.div`
   display: grid;
@@ -22,6 +26,9 @@ const Cabin = styled.div`
   color: var(--color-grey-600);
   font-family: "Sono";
 `;
+
+// const Button = styled.button`
+// background-color`
 
 const Stacked = styled.div`
   display: flex;
@@ -57,6 +64,11 @@ function BookingRow({
     Cabins: { name: cabinName = "Unknown Cabin" } = {},
   },
 }) {
+
+
+  const navigate = useNavigate();
+
+
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -84,6 +96,7 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(cabinPrice)}</Amount>
+      <Button size="small" variation="primary" onClick={() => navigate(`/booking/${bookingId}`)} >Open Booking </Button>
     </TableRow>
   );
 }

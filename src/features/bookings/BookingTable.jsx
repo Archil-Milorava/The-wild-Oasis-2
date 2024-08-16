@@ -4,6 +4,7 @@ import BookingRow from "./BookingRow.jsx";
 import { useBookings } from "./useBookings";
 import { useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
+import Pagination from "../../ui/Pagination.jsx";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -34,6 +35,22 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
+const StyledFooter = styled.footer`
+background-color: var(--color-grey-50);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  color: var(--color-grey-600);
+  padding: 1.6rem 2.4rem;
+
+  border: 1px solid var(--color-grey-200);
+  height: auto;
+  width: 100%;
+  font-size: 1.4rem;
+  border-radius: 7px;
+  
+`
+
 function BookingTable() {
   const { isLoading, data: bookings } = useBookings();
 
@@ -59,6 +76,7 @@ function BookingTable() {
 
 
   return (
+    <>
     <Table role="table">
       <TableHeader role="row">
         <div>Cabin</div>
@@ -66,7 +84,7 @@ function BookingTable() {
         <div>Dates</div>
         <div>Status</div>
         <div>Amount</div>
-        <div></div>
+        <div>Quantity: {filteredBookings.length}</div>
       </TableHeader>
 
       {!filteredBookings.length ? (
@@ -77,6 +95,10 @@ function BookingTable() {
         ))
       )}
     </Table>
+    <StyledFooter >
+<Pagination count={5} />
+    </StyledFooter>
+      </>
   );
 }
 

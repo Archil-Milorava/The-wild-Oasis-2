@@ -105,18 +105,18 @@ const Footer = styled.footer`
 function BookingDataBox({ booking }) {
   const {
     created_at,
-    startDate,
+    startdDate,
     endDate,
     numNights,
     numGuests,
     cabinPrice,
     extrasPrice,
-    totalPrice,
+    // totalPrice,
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    Guests: { fullName: guestName, email, nationality, countryFlag, nationalId },
+    Cabins: { name: cabinName },
   } = booking;
 
   return (
@@ -130,24 +130,24 @@ function BookingDataBox({ booking }) {
         </div>
 
         <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
+          {format(new Date(startdDate), "EEE, MMM dd yyyy")} (
+          {isToday(new Date(startdDate))
             ? "Today"
-            : formatDistanceFromNow(startDate)}
+            : formatDistanceFromNow(startdDate)}
           ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
         </p>
       </Header>
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${nationality}`} />}
           <p>
             {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
           <span>&bull;</span>
-          <p>National ID {nationalID}</p>
+          <p>National ID {nationalId}</p>
         </Guest>
 
         {observations && (
@@ -165,7 +165,7 @@ function BookingDataBox({ booking }) {
 
         <Price isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
-            {formatCurrency(totalPrice)}
+            {/* {formatCurrency(totalPrice)} */}
 
             {hasBreakfast &&
               ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(

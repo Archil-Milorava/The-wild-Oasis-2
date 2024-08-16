@@ -120,7 +120,7 @@ function BookingDataBox({ booking }) {
     Cabins: { name: cabinName },
   } = booking;
 
-const totalPrice = cabinPrice + extrasPrice;
+const totalPrice = cabinPrice;
 
 const statusToTagName = {
   unconfirmed: "blue",

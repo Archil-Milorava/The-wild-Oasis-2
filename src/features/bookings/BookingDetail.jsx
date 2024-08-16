@@ -15,6 +15,7 @@ import Checkbox from "../../ui/Checkbox";
 import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
 import useCheckin from "../check-in-out/useCheckin";
+import { useUpdateSettingsHook } from "../settings/useUpdateSettingsHook";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -34,18 +35,36 @@ function BookingDetail() {
   const moveBack = useMoveBack();
 
   const [confirmed, setConfirmed] = useState(false);
+  const [addBreakfast, setAddBreakfast] = useState(false);
 
   const { data: booking, isLoading } = useBooking();
 
   const { isCheckingIn, checkIn } = useCheckin();
+  const { settingsData, isLoading: isLoadingSettings} = useUpdateSettingsHook();
 
-  if (isLoading) return <Spinner />;
+  if (isLoading || isLoadingSettings) return <Spinner />;
+  
 
   const totalPrice = booking.cabinPrice + booking.extrasPrice;
+  const additionalBreakfastPrice = booking.numNights * booking.numGuests * settingsData[0].breakfastPrice;
+  const totalPriceWithBreakfast = totalPrice + (addBreakfast ? additionalBreakfastPrice : 0);
+
+  
 
   function handleCheckIn() {
     if(!confirmed) return;
-    checkIn(booking.id);
+
+    if (addBreakfast) {
+      checkIn({
+        bookingId: booking.id, breakfast : {
+          hasBreakfast: true,
+          cabinPrice: totalPriceWithBreakfast,
+          isPaid: true
+        }});
+      
+    } else {
+      checkIn(booking.id, {});
+    }
   }
 
   const statusToTagName = {
@@ -66,6 +85,22 @@ function BookingDetail() {
 
       <BookingDataBox booking={booking} />
 
+
+      {
+        !booking.hasBreakfast && (
+          <Box>
+          <Checkbox
+          checked={addBreakfast}
+          onChange={() => setAddBreakfast(!addBreakfast)}
+          id={booking.id}
+        >
+          Would you like to add Breakfast({formatCurrency(settingsData[0].breakfastPrice)}) for {formatCurrency(additionalBreakfastPrice)}?
+        </Checkbox>
+      </Box>
+        )
+      }
+
+
         {!booking.isPaid && (
       <Box>
           <Checkbox
@@ -74,7 +109,7 @@ function BookingDetail() {
           id={booking.id}
         >
           The guest {booking.Guests.fullName} has paid full amount of{" "}
-          {formatCurrency(totalPrice)}{" "}
+          {!addBreakfast ? formatCurrency(totalPrice) : formatCurrency(totalPriceWithBreakfast)}
         </Checkbox>
       </Box>
         )}

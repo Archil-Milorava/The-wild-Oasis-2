@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
 import Tag from "../../ui/Tag";
-
-import { formatCurrency } from "../../utils/helpers";
-import { formatDistanceFromNow } from "../../utils/helpers";
+import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
 
 const TableRow = styled.div`
   display: grid;
@@ -17,7 +15,6 @@ const TableRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
-
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -50,19 +47,16 @@ function BookingRow({
   booking: {
     id: bookingId,
     created_at,
-    stardDate,
+    startdDate,
     endDate,
     numNights,
     numGuests,
     cabinPrice,
     status,
-    Guests: { fullName: guestName, email },
-    Cabins: { name: cabinName },
+    Guests: { fullName: guestName = "Guest", email = "N/A" } = {},
+    Cabins: { name: cabinName = "Unknown Cabin" } = {},
   },
 }) {
-
-
-
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -79,16 +73,12 @@ function BookingRow({
       </Stacked>
 
       <Stacked>
-        {/* <span>
-          {isToday(new Date(stardDate))
-            ? "Today"
-            : formatDistanceFromNow(stardDate)}
-          &rarr; {numNights} night stay
-        </span> */}
-        {/* <span>
-          {format(new Date(stardDate), "MMM dd yyyy")} &mdash;
-          {format(new Date(endDate), "MMM dd yyyy")}
-        </span> */}
+        <span>
+           {numNights > 1 ? `${numNights} nights` : `${numNights} night`}
+        </span>
+        <span>
+          {format(new Date(startdDate), "MMM dd yyyy")} &mdash; {format(new Date(endDate), "MMM dd yyyy")}
+        </span>
       </Stacked>
 
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>

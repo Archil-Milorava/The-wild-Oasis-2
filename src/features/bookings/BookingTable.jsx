@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import BookingRow from "./BookingRow.jsx";
-import {useBookings} from "./useBookings";
 import Spinner from "../../ui/Spinner";
-import Empty from "../../ui/Empty.jsx"
-
+import BookingRow from "./BookingRow.jsx";
+import { useBookings } from "./useBookings";
+import { useSearchParams } from "react-router-dom";
+import Empty from "../../ui/Empty";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -35,11 +35,27 @@ const TableHeader = styled.header`
 `;
 
 function BookingTable() {
-//   const {data: bookings, isLoading} = useBookings();
-const {isLoading, data: bookings} = useBookings()
+  const { isLoading, data: bookings } = useBookings();
 
-if(isLoading) return <Spinner />
+  const [searchParams] = useSearchParams();
+  const filteredValue = searchParams.get("status");
 
+  if (isLoading) return <Spinner />;
+  let filteredBookings;
+
+  if (filteredValue === "all" || !filteredValue) filteredBookings = bookings;
+  if (filteredValue === "checked-out")
+    filteredBookings = bookings.filter(
+      (booking) => booking.status === "checked-out"
+    );
+  if (filteredValue === "checked-in")
+    filteredBookings = bookings.filter(
+      (booking) => booking.status === "checked-in"
+    );
+  if (filteredValue === "unconfirmed")
+    filteredBookings = bookings.filter(
+      (booking) => booking.status === "unconfirmed"
+    );
 
 
   return (
@@ -52,9 +68,14 @@ if(isLoading) return <Spinner />
         <div>Amount</div>
         <div></div>
       </TableHeader>
-      {bookings.map((booking) => (
-        <BookingRow key={booking.id} booking={booking} />
-      ))}
+
+      {!filteredBookings.length ? (
+        <Empty resource="booking" />
+      ) : (
+        filteredBookings.map((booking) => (
+          <BookingRow key={booking.id} booking={booking} />
+        ))
+      )}
     </Table>
   );
 }

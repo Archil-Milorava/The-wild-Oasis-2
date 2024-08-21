@@ -57,12 +57,6 @@ function MainNav() {
     <nav>
       <NavList>
         <li>
-          <StyledNavLink to="/dashboard">
-            <IoHomeOutline />
-            <span>Dashboard</span>
-          </StyledNavLink>
-        </li>
-        <li>
           <StyledNavLink to="/bookings">
             <IoCalendarOutline />
             <span>Bookings</span>

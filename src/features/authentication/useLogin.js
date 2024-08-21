@@ -11,7 +11,7 @@ export default function useLogin() {
       mutationFn: ({ email, password }) => loginWithEmail({ email, password }),
       onSuccess: (user) => {
         queryClient.setQueryData(["user"], user.user);
-        navigate("/dashboard");
+        navigate("/bookings");
       },
       onError: (error) => {
         throw new Error(error);

@@ -95,9 +95,7 @@ function BookingTable() {
         ))
       )}
     </Table>
-    <StyledFooter >
-<Pagination count={5} />
-    </StyledFooter>
+     
       </>
   );
 }

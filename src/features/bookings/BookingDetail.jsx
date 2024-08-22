@@ -8,6 +8,7 @@ import Row from "../../ui/Row";
 import Spinner from "../../ui/Spinner";
 import Tag from "../../ui/Tag";
 import BookingDataBox from "./BookingDataBox";
+import Empty from "../../ui/Empty";
 
 import { useState } from "react";
 import { useMoveBack } from "../../hooks/useMoveBack";
@@ -71,6 +72,7 @@ function BookingDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (isLoading || isLoadingSettings) return <Spinner />;
+  if(!booking) return <Empty recourse="booking" />
 
   const totalPrice = booking.cabinPrice + booking.extrasPrice;
   const additionalBreakfastPrice =
